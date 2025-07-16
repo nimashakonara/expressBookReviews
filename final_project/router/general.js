@@ -5,14 +5,10 @@ let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
 
-public_users.get("/", function (req, res) {
-    // Assuming 'books' is imported or defined earlier in the file
-    return res.status(200).send(JSON.stringify(books, null, 2));
-  });
-
+// Get the book list available in the shop
 public_users.get("/", function (req, res) {
   const titles = Object.values(books).map(book => book.title);
-  return res.status(300).json({ titles });
+  return res.status(200).json({ titles });
 });
 
 // Get book details based on ISBN
