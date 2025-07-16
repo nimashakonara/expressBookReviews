@@ -3,7 +3,10 @@ const jwt = require('jsonwebtoken');
 let books = require("./booksdb.js");
 const regd_users = express.Router();
 
-let users = [];
+let users = [
+    { username: "newUser123", password: "securePass456" },
+    // other users
+  ];
 
 const isValid = (username)=>{ 
       // Filter the users array for any user with the same username
@@ -85,7 +88,7 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
       reviews: book.reviews
     });
   });
-
+module.exports.authenticatedUser = authenticatedUser;
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;
 module.exports.users = users;

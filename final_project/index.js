@@ -5,6 +5,7 @@ const { authenticatedUser, isValid, users } = require('./router/auth_users.js');
 const customer_routes = require('./router/auth_users.js').authenticated;
 const genl_routes = require('./router/general.js').general;
 
+
 const app = express();
 const PORT = 5000;
 
