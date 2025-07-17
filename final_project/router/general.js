@@ -3,8 +3,66 @@ let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
+const axios = require('axios');
 
+async function getBooks() {
+  try {
+    const response = await axios.get('http://localhost:5000/books');
+    console.log("Books from shop (async):", response.data);
+  } catch (error) {
+    console.error("Error fetching books:", error.message);
+  }
+}
 
+getBooks();
+
+function getBookByISBN(isbn) {
+    axios.get(`http://localhost:5000/books/${isbn}`)
+      .then(response => {
+        console.log(`Details for book ${isbn}:`, response.data);
+      })
+      .catch(error => {
+        console.error("Error fetching book details:", error.message);
+      });
+  }
+  
+  getBookByISBN(3);   
+
+// Async function to get books by author
+
+function getBooksByAuthor(authorName) {
+    axios.get('http://localhost:5000/books')
+      .then(response => {
+        const books = response.data;
+        const filtered = Object.values(books).filter(book =>
+          book.author.toLowerCase() === authorName.toLowerCase()
+        );
+        console.log(`Books by ${authorName}:`, filtered);
+      })
+      .catch(error => {
+        console.error("Error fetching books:", error.message);
+      });
+  }
+  
+  getBooksByAuthor("Jane Austen");
+  
+  // Async function to get book by title
+  function getBooksByTitle(title) {
+    axios.get('http://localhost:5000/books')
+      .then(response => {
+        const books = response.data;
+        const matchingBooks = Object.values(books).filter(book =>
+          book.title.toLowerCase() === title.toLowerCase()
+        );
+        console.log(`Details for book titled "${title}":`, matchingBooks);
+      })
+      .catch(error => {
+        console.error("Error fetching book details:", error.message);
+      });
+  }
+  
+  getBooksByTitle("Pride and Prejudice");
+  
 // Get the book list available in the shop
 public_users.get("/", function (req, res) {
   const titles = Object.values(books).map(book => book.title);
@@ -24,7 +82,7 @@ public_users.get('/isbn/:isbn', function (req, res) {
   }							
 });							
 
-  
+
 // Get book details based on author
 public_users.get('/author/:author', function (req, res) {
   const requestedAuthor = req.params.author.toLowerCase();
